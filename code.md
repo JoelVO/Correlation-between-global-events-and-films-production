@@ -39,7 +39,7 @@ For the preprocessing of the movies, if was interested in knowing, with some giv
 
 ````python
 col=np.unique(np.array(df.genres)) # array with all the possible movie genres
-A=np.zeros((len(col),2021-1979)) #matrix
+A=np.zeros((len(col),2021-1979)) #matrix of zeros
 
 #counting the disired proportions
 for j in range(len(col)): #for each movie genre
@@ -48,6 +48,26 @@ for j in range(len(col)): #for each movie genre
         
 ````
 
-As a result of this last block of code, I was able to make the following graphs where the genre "N" corresponds for none.
+As a result of this last block of code, I was able to make the following graphs where the genre "N" corresponds for none. This was made so I could have a grasp on the behaviour of the data I was working with.
 
-![](\images\movies_vs_time_1.png)
+![](/images/movies_vs_time_1.png)
+![](/images/movies_vs_time_2.png)
+![](/images/movies_vs_time_3.png)
+
+As we can see, some genres have became more popular through time, such as horror of documentary.
+
+Looking for correlation between the data from the movies and the news, I calculated the correlation matrix with the following code
+
+````python
+B=pd.read_csv('/Users/52553/OneDrive/Escritorio/pelis_tiempo.csv') #reading the processed data from the movies
+D=pd.read_csv('/Users/52553/OneDrive/Escritorio/eventos_tiempo.csv') #reading the processed data from the news
+
+result = pd.concat([B, D], axis=1, sort=False) #making one dataframe from the previous ones
+corr_mat=result.corr() #calculating the correlation matrix
+
+plt.figure(figsize = (35,30)) #setting a figure
+sns.heatmap(corr_mat,annot=True) #transforming the correlation matrix into a heatmap
+plt.show() #showing the constructed image
+
+````
+ This code gave as output the next image.
