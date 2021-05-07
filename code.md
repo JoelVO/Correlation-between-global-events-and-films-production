@@ -1,18 +1,15 @@
 The imported libraries were
 
 ```python
-import zipfile
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import os
 import collections
 import seaborn as sns
 import tensorflow as tf
-import scipy
 ```
 
-I started this project by condensing the information I needed from the DGELT Project database. Using pandas, I explored all the databases (because of the amount of information, GDELT divided it into several datasets) calculating which amount of the news published in some given year where belonged to some given category of the CAMEO guidelines.
+I started this project by condensing the information I needed from the DGELT Project database. Using pandas, I explored all the databases (because of the amount of information, GDELT divided it into several datasets) calculating which amount of the news published in some given year belonged to some given category of the CAMEO guidelines.
 
 For example, for the dataset corresponding to the news published on april, 2013, the code was 
 
@@ -35,7 +32,7 @@ for i in range(1,31): #one csv per day of that month
 ````
 where A was a list which would become a dataframe at the end of the preprocessing part.
 
-For the preprocessing of the movies, if was interested in knowing, with some given year, the proportion of movies released on that year which belonged to a given genre. The code for this was 
+For the preprocessing of the movies, I was interested in knowing, with some given year, the proportion of movies released on that year which belonged to a given genre. The code for this was 
 
 ````python
 col=np.unique(np.array(df.genres)) # array with all the possible movie genres
@@ -48,7 +45,7 @@ for j in range(len(col)): #for each movie genre
         
 ````
 
-As a result of this last block of code, I was able to make the following graphs where the genre "N" corresponds for none. This was made so I could have a grasp on the behaviour of the data I was working with.
+As a result of this last block of code, I was able to make the following graphs where the genre "N" stands for "no classificated". This was made so I could have a grasp on the behaviour of the data I was working with.
 
 ![](/images/movies_vs_time_1.png)
 ![](/images/movies_vs_time_2.png)
@@ -70,15 +67,15 @@ sns.heatmap(corr_mat,annot=True) #transforming the correlation matrix into a hea
 plt.show() #showing the constructed image
 
 ````
- This code gave as output the next image, where the names on the axis are the movie genres and the possible classifications of the CAMEO guidelines repressented by numbers from 0 to 19.
+ This code gave as output the next image, where the names on the axis are the movie genres and the possible classifications of the CAMEO guidelines represented by numbers from 0 to 19.
  
  ![](/images/correlation_matrix.png)
 
-The mathematical expression used for this calculation is the one from statistics and I think it is worthy to speak about its interpretation. When calculating the correlation between two series of data, one try to adjust a lineal function between both series taking one of then as a independent variable and the other one as the dependent variable. The sign of the result tells us if the relation is positive (an increment on the independent variable generates an increment on the dependent variable) or if it is negative (an increment on the independent variable produces a decrement on the dependent variable); on the other side, the absolute value of the result tells us how big was the effect found between the variables: if the absolute value is between 0 and 0.3, the effect is little; for absolute values between 0.3 and 0.5, there is evidence of a medium effect; and when the absolute value is bigger than 0.5, one may say the effect is big.
+The mathematical expression used for this calculation is the one from statistics and I think it is worthy to speak about its interpretation. When calculating the correlation between two series of data, one try to adjust a lineal function between both series taking one of then as an independent variable and the other one as the dependent variable. The sign of the result tells us if the relation is positive (an increment on the independent variable generates an increment on the dependent variable) or if it is negative (an increment on the independent variable produces a decrement on the dependent variable). On the other hand, the absolute value of the result tells us how big was the effect found between the variables: if the absolute value is between 0 and 0.3, the effect was little; for absolute values between 0.3 and 0.5, there was evidence of a medium effect; and when the absolute value is bigger than 0.5, one may say the effect was big.
 
 With this in mind, I may say I found several correlations between the type of news and the relevance on a movie genre, so I may affirm that the results of the model I am about to present are not just a numerical coincidences or an ad hoc function made using approximations in some space where the discrete topology was induced.
 
-To build the DNN, I used the following code.
+To build the DNN, I used the following code. As I will explain on it, I was able to think this problem as one of classification, being this the reason I decided to use this kind of approach and arquitecture.
 
 ````python
 
@@ -102,4 +99,10 @@ model.add(tf.keras.layers.Dense(len(Y[0]),activation='softmax')) #the output wil
 model.compile(loss='mean_squared_error', optimizer='adam', metrics=['CategoricalCrossentropy'])  
 
 ````
+Because I had less than 50 samples, I did not make a training and testing set, but I trained de neuron with all the samples I had. Nevertheless, the fact that the neuron was trained with less than 2500 epochs and the results from the correlation matrix allows me to think the results are real and that the neuron was not overfitted. 
+In the following figure I present the results after training the DNN for 2500 epochs, where the x axis is the year in which the news were published and the y axis is the maximum entry from the array consisting on the absolute values of the differences between the actual movies data and the model's prediction. As one can see, the biggest error was less than 0.015, meaning the model reached a training for the proportion of movies for each genre with an error below than 1.5%.
 
+
+ ![](/images/results.png)
+ 
+ It's important to say this does not pretend to be a causal model, but just to be a correlation model in order to try to understand which types of events on the world tend to have more representation or impact into the cinematographic industry.
