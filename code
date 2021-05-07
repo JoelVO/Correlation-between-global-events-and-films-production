@@ -1,9 +1,1 @@
-
-![](main/images/pelis.png)
-
-```ruby
-require 'redcarpet'
-markdown = Redcarpet.new("Hello World!")
-puts markdown.to_html
-puts markdown.to_html
-```
+I started this project by condensing the information I needed from the DGELT Project database. Using pandas, 
