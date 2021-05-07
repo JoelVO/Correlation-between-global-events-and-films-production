@@ -70,4 +70,36 @@ sns.heatmap(corr_mat,annot=True) #transforming the correlation matrix into a hea
 plt.show() #showing the constructed image
 
 ````
- This code gave as output the next image.
+ This code gave as output the next image, where the names on the axis are the movie genres and the possible classifications of the CAMEO guidelines repressented by numbers from 0 to 19.
+ 
+ ![](/images/correlation_matrix.png)
+
+The mathematical expression used for this calculation is the one from statistics and I think it is worthy to speak about its interpretation. When calculating the correlation between two series of data, one try to adjust a lineal function between both series taking one of then as a independent variable and the other one as the dependent variable. The sign of the result tells us if the relation is positive (an increment on the independent variable generates an increment on the dependent variable) or if it is negative (an increment on the independent variable produces a decrement on the dependent variable); on the other side, the absolute value of the result tells us how big was the effect found between the variables: if the absolute value is between 0 and 0.3, the effect is little; for absolute values between 0.3 and 0.5, there is evidence of a medium effect; and when the absolute value is bigger than 0.5, one may say the effect is big.
+
+With this in mind, I may say I found several correlations between the type of news and the relevance on a movie genre, so I may affirm that the results of the model I am about to present are not just a numerical coincidences or an ad hoc function made using approximations in some space where the discrete topology was induced.
+
+To build the DNN, I used the following code.
+
+````python
+
+df=pd.read_csv('/Users/52553/OneDrive/Escritorio/eventos_tiempo.csv') #preocessed data from the news
+df1=pd.read_csv('/Users/52553/OneDrive/Escritorio/pelis_tiempo.csv') #processed data from the movies
+
+Y=df1.to_numpy()
+X=df.to_numpy()
+
+X = np.reshape(X, (X.shape[0], 1, X.shape[1]))
+
+model = tf.keras.Sequential() #creating a sequential model
+model.add(tf.keras.Input(shape=(20,)))  #the input were the data from the news, therefore I needed 20 input units, one for each possible classification of the news
+model.add(tf.keras.layers.Dense(20, activation='relu'))
+model.add(tf.keras.layers.Dense(5, activation='tanh')) #I experimented with several activation functions and these proved to be the best
+model.add(tf.keras.layers.Dense(len(Y[0]),activation='softmax')) #the output will be the data from the movies
+#since the output data is a vector in which each entry is the proportion of movies of the corresponding genre made that year, the velues are between 0 and 1
+#even more, again by the meaning of the entries, the sum of all the entries from the vector is equal to 1
+#then, I can think this vector as a discrete probability function and therefore think of this problem as a model for classification
+          
+model.compile(loss='mean_squared_error', optimizer='adam', metrics=['CategoricalCrossentropy'])  
+
+````
+
