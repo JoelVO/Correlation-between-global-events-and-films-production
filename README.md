@@ -12,4 +12,4 @@ For further explanation of the meaning of the classification you can look the li
 
 Once I had a good representation for the events across the world, I needed information about the produced movies across the time, so I took the IMDB movies database. What I used from this database was the releasing year of the movie and its genres.
 
-The rest of the procedure will be described on the code.
+The rest of the procedure will be described on the code. It's important to say this does not pretend to be a causal model, but just to be a correlation model in order to try to understand which types of events on the world tend to have more representation or impact into the cinematographic industry.
