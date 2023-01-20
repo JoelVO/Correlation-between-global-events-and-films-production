@@ -1,5 +1,5 @@
 # Correlation-between-global-events-and-films-production
-A script containing a DNN showing a correlation between sociopolitical events around the world and predominant filmic genres in that year
+A script containing a DNN showing a correlation between sociopolitical events around the world and predominant filmic genres in that year. This project was made as part of my bachelor's curriculum.
 
 Before I talk about the actual code or implementation, I think it is worthy to explain the motivation of this work.
 
